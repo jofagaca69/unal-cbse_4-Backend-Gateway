@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -11,7 +10,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       { name: 'PAYMENT-SERVICE', transport: Transport.TCP, options: { port: 3003 }},
     ])
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UserController],
+  providers: [],
 })
 export class AppModule {}
