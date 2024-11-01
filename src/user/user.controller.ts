@@ -5,36 +5,56 @@ import {
   Body,
   HttpException,
   HttpStatus,
-  Inject,
   Param,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { lastValueFrom } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Controller('user')
 export class UserController {
+  private userServiceUrl: string;
+
   constructor(
-    @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
-  ) {}
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {
+    this.userServiceUrl = this.configService.get<string>('MS1_URL');
+  }
 
   @Get(':id')
-  getUser(@Param('id') id: number): Observable<any> {
-    return this.userServiceClient.send({ cmd: 'get_user' }, { id }).pipe(
-      catchError((err) => {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            error: `User with ID ${id} not found`,
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      }),
-    );
+  async getUser(@Param('id') id: number): Promise<any> {
+    try {
+      console.info(`URL: ${this.userServiceUrl}/user/${id}`);
+      const response = await lastValueFrom(
+        this.httpService.get(`${this.userServiceUrl}/user/${id}`).pipe(
+          map((res) => res.data),
+          catchError(() => {
+            throw new HttpException(
+              {
+                status: HttpStatus.NOT_FOUND,
+                error: `User with ID ${id} not found`,
+              },
+              HttpStatus.NOT_FOUND,
+            );
+          }),
+        ),
+      );
+      return response;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: `User with ID ${id} not found`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post()
-  createUser(
+  async createUser(
     @Body()
     userData: {
       name: string;
@@ -42,17 +62,31 @@ export class UserController {
       email: string;
       phone?: string;
     },
-  ): Observable<any> {
-    return this.userServiceClient.send({ cmd: 'create_user' }, userData).pipe(
-      catchError((err) => {
-        throw new HttpException(
-          {
-            status: HttpStatus.CONFLICT,
-            error: `User with email ${userData.email} already exists`,
-          },
-          HttpStatus.CONFLICT,
-        );
-      }),
-    );
+  ): Promise<any> {
+    try {
+      const response = await lastValueFrom(
+        this.httpService.post(`${this.userServiceUrl}/user`, userData).pipe(
+          map((res) => res.data),
+          catchError((error) => {
+            throw new HttpException(
+              {
+                status: HttpStatus.CONFLICT,
+                error: `User with email ${userData.email} already exists`,
+              },
+              HttpStatus.CONFLICT,
+            );
+          }),
+        ),
+      );
+      return response;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: `User with email ${userData.email} already exists`,
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 }
