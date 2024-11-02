@@ -1,99 +1,70 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Proyecto de Microservicios para Jangol
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este repositorio contiene los componentes del sistema basado en microservicios de Jangol, incluyendo el API Gateway. A continuación se detalla la información del componente.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Componente del Sistema
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### API Gateway
+- **Tipo de componente**: API Gateway
+- **Nombre**: API Gateway - Enrutador de solicitudes
+- **Paradigma**: Enrutamiento y autorización centralizada de microservicios
+- **Sistema de gestión**: N/A (No almacena datos)
 
-## Project setup
+---
 
-```bash
-$ yarn install
-```
+## Descripción del Sistema
 
-## Compile and run the project
+El sistema está diseñado bajo una arquitectura de microservicios donde cada componente es responsable de una funcionalidad específica dentro del dominio del sistema:
 
-```bash
-# development
-$ yarn run start
+- **MS1**: Gestión de usuarios y operaciones relacionadas con los datos de los usuarios.
+- **MS2**: Administración de reservaciones, incluyendo la lógica de negocio necesaria para validar y gestionar las reservas.
+- **MS3**: Procesamiento de pagos e integración con sistemas externos para completar transacciones financieras.
+- **API Gateway**: Responsable de centralizar las solicitudes y distribuirlas a los microservicios correspondientes.
 
-# watch mode
-$ yarn run start:dev
+## Tecnologías
 
-# production mode
-$ yarn run start:prod
-```
+- **Node.js** y **NestJS**: Framework principal utilizado para desarrollar cada microservicio y el API Gateway.
+- **MySQL**: Base de datos relacional utilizada en los microservicios MS1 y MS2.
+- **Firestore**: Base de datos NoSQL utilizada para almacenar registros de pagos en MS3.
+- **Google Cloud Platform (GCP)**: Infraestructura de nube en la que se despliegan los microservicios y el API Gateway.
 
-## Run tests
+## Configuración
 
-```bash
-# unit tests
-$ yarn run test
+Cada microservicio y el API Gateway pueden configurarse mediante variables de entorno definidas en archivos `.env` o en la configuración de despliegue en GCP.
 
-# e2e tests
-$ yarn run test:e2e
+---
 
-# test coverage
-$ yarn run test:cov
-```
+## Despliegue
 
-## Deployment
+Cada componente se despliega independientemente, permitiendo una escalabilidad horizontal y un control separado para cada servicio. El API Gateway está configurado para manejar todas las solicitudes externas y distribuirlas a los microservicios según las rutas especificadas.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Ejecución Local
 
-```bash
-$ yarn install -g mau
-$ mau deploy
-```
+Para ejecutar los microservicios y el API Gateway localmente:
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+1. Clona el repositorio y navega a cada carpeta de los microservicios.
+2. Ejecuta `yarn` para instalar las dependencias de cada componente.
+3. Configura los archivos `.env` con las variables de entorno necesarias.
+4. Ejecuta `npm run start:dev` en cada componente para levantar los servicios en desarrollo.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Estructura de Archivos `.env`
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Cada microservicio y el API Gateway utilizan variables de entorno para configurar sus conexiones y servicios. A continuación, se detalla la estructura de los archivos `.env` necesarios:
 
-## Support
+### MS y API Gateway
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```plaintext
+# Configuración de la base de datos MySQL
+DATABASE_HOST=<URL_db_sql>
+DATABASE_PORT=<puerto_db_sql>
+DATABASE_USERNAME=<usuario_db_sql>
+DATABASE_PASSWORD=<contraseña_db_sql>
+DATABASE_NAME=<nombre_db_sql>
+NODE_ENV=<environment>
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
